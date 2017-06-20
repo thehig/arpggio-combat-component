@@ -1,0 +1,29 @@
+{
+  "name": "arpggio-combat-component",
+  "version": "0.0.0",
+  "description": "arpggio-combat-component",
+  "main": "dist/arpggio-combat-component.min.js",
+  "homepage": "https://github.com/thehig/arpggio-combat-component",
+  "authors": [
+    "David Higgins"
+  ],
+  "moduleType": [
+    "amd",
+    "globals",
+    "node"
+  ],
+  "keywords": [
+    "react",
+    "react-component"
+  ],
+  "license": "MIT",
+  "ignore": [
+    ".editorconfig",
+    ".gitignore",
+    "package.json",
+    "src",
+    "node_modules",
+    "example",
+    "test"
+  ]
+}
