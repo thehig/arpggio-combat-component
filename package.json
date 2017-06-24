@@ -22,7 +22,8 @@
     "gulp": "^3.9.0",
     "react": "^0.14.0",
     "react-component-gulp-tasks": "^0.7.6",
-    "react-dom": "^0.14.0"
+    "react-dom": "^0.14.0",
+    "@storybook/react": "^3.1.5"
   },
   "peerDependencies": {
     "react": "^0.14.0"
@@ -38,7 +39,9 @@
     "release": "NODE_ENV=production gulp release",
     "start": "gulp dev",
     "test": "echo \"no tests yet\" && exit 0",
-    "watch": "gulp watch:lib"
+    "watch": "gulp watch:lib",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "keywords": [
     "react",
