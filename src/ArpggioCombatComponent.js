@@ -1,31 +1,58 @@
 import React from 'react';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
+import { List, ListItem } from 'material-ui/List';
+// import ContentInbox from 'material-ui/svg-icons/content/inbox';
+// import ActionGrade from 'material-ui/svg-icons/action/grade';
+// import ContentSend from 'material-ui/svg-icons/content/send';
+// import ContentDrafts from 'material-ui/svg-icons/content/drafts';
+// import Divider from 'material-ui/Divider';
+// import ActionInfo from 'material-ui/svg-icons/action/info';
+/*
+const ListExampleSimple = ({ action }) => (
+  <div>
+    <List>
+      <ListItem onTouchTap={action('ContentInbox')} primaryText="Inbox" leftIcon={<ContentInbox />} />
+      <ListItem onTouchTap={action('ActionGrade')} primaryText="Starred" leftIcon={<ActionGrade />} />
+      <ListItem onTouchTap={action('ContentSend')} primaryText="Sent mail" leftIcon={<ContentSend />} />
+      <ListItem onTouchTap={action('ContentDrafts')} primaryText="Drafts" leftIcon={<ContentDrafts />} />
+      <ListItem onTouchTap={action('ContentInbox')} primaryText="Inbox" leftIcon={<ContentInbox />} />
+    </List>
+    <Divider />
+    <List>
+      <ListItem primaryText="All mail" rightIcon={<ActionInfo />} />
+      <ListItem primaryText="Trash" rightIcon={<ActionInfo />} />
+      <ListItem primaryText="Spam" rightIcon={<ActionInfo />} />
+      <ListItem primaryText="Follow up" rightIcon={<ActionInfo />} />
+    </List>
+  </div>
+);
+export default ListExampleSimple;
+*/
 
-const CardExampleWithAvatar = () => (
-  <Card>
-    <CardHeader
-      title="URL Avatar"
-      subtitle="Subtitle"
-      avatar="images/jsa-128.jpg"
-    />
-    <CardMedia
-      overlay={<CardTitle title="Overlay title" subtitle="Overlay subtitle" />}
-    >
-      <img src="images/nature-600-337.jpg" alt="" />
-    </CardMedia>
-    <CardTitle title="Card title" subtitle="Card subtitle" />
-    <CardText>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Donec mattis pretium massa. Aliquam erat volutpat. Nulla facilisi.
-      Donec vulputate interdum sollicitudin. Nunc lacinia auctor quam sed pellentesque.
-      Aliquam dui mauris, mattis quis lacus id, pellentesque lobortis odio.
-    </CardText>
-    <CardActions>
-      <FlatButton label="Action1" />
-      <FlatButton label="Action2" />
-    </CardActions>
-  </Card>
+const Player = ({ name }) => (
+  <div>Player {name}</div>
 );
 
-export default CardExampleWithAvatar;
+const ActionBar = () => (
+  <div>Action Bar</div>
+);
+
+const CombatList = ({ children }) => (
+  <div>
+    Combat List
+    { children && children }
+  </div>
+);
+
+const CombatComponent = () => (
+  <div>
+    Combat Component
+    <ActionBar />
+    <CombatList>
+      <Player name="Andrew" />
+      <Player name="Brian" />
+      <Player name="Charlie" />
+    </CombatList>
+  </div>
+);
+
+export default CombatComponent;
