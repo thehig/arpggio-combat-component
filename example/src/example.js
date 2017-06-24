@@ -1,17 +1,21 @@
-const React = require('react');
-const ReactDOM = require('react-dom');
-/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
-const ArpggioCombatComponent = require('arpggio-combat-component');
-/* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-const App = React.createClass({
-  render() {
-    return (
-      <div>
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies, import/extensions */
+import ArpggioCombatComponent from 'arpggio-combat-component';
+/* eslint-enable import/no-unresolved, import/no-extraneous-dependencies, import/extensions */
+
+const App = () => {
+    <MuiThemeProvider>
         <ArpggioCombatComponent />
-      </div>
-    );
-  },
-});
+    </MuiThemeProvider>
+};
+
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
 ReactDOM.render(<App />, document.getElementById('app'));
