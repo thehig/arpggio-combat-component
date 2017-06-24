@@ -1,0 +1,19 @@
+{
+	"folders":
+	[
+		{
+			"path": ".",
+            "name": "/",
+            "folder_exclude_patterns": ["node_modules", "src", "stories", "example"]
+		},
+        {
+            "path": "src"
+        },
+        {
+            "path": "stories"
+        },
+        {
+            "path": "example"
+        }
+	]
+}
