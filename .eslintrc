@@ -6,7 +6,8 @@
 	},
 	"extends": "airbnb",
 	"plugins": [
-		"react"
+		"react",
+		"transform-decorators-legacy"
 	],
 	"rules": {
 		'guard-for-in': 0,
