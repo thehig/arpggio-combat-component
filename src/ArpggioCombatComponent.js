@@ -1,9 +1,5 @@
-var React = require('react');
+import React from 'react';
 
-var ArpggioCombatComponent = React.createClass({
-	render () {
-		return <div>arpggio-combat-component</div>;
-	}
-});
+const ArpggioCombatComponent = () => <div>arpggio-combat-component</div>;
 
 export default ArpggioCombatComponent;

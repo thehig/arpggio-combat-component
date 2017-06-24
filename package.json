@@ -22,8 +22,11 @@
   "devDependencies": {
     "@storybook/react": "^3.1.5",
     "babel-eslint": "^7.2.3",
-    "eslint": "^4.1.0",
-    "eslint-plugin-react": "^7.1.0",
+    "eslint": "3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
+    "eslint-plugin-import": "2.2.0",
+    "eslint-plugin-jsx-a11y": "5.0.1",
+    "eslint-plugin-react": "7.0.1",
     "gulp": "^3.9.1",
     "react": "^15.6.1",
     "react-component-gulp-tasks": "^0.7.7",
@@ -39,7 +42,7 @@
   "scripts": {
     "build": "gulp clean && NODE_ENV=production gulp build",
     "examples": "gulp dev:server",
-    "lint": "eslint ./; true",
+    "lint": "eslint ./src ./example ./stories",
     "publish:site": "NODE_ENV=production gulp publish:examples",
     "release": "NODE_ENV=production gulp release",
     "start": "gulp dev",
