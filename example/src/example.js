@@ -1,15 +1,17 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var ArpggioCombatComponent = require('arpggio-combat-component');
+const React = require('react');
+const ReactDOM = require('react-dom');
+/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
+const ArpggioCombatComponent = require('arpggio-combat-component');
+/* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
-var App = React.createClass({
-	render () {
-		return (
-			<div>
-				<ArpggioCombatComponent />
-			</div>
-		);
-	}
+const App = React.createClass({
+  render() {
+    return (
+      <div>
+        <ArpggioCombatComponent />
+      </div>
+    );
+  },
 });
 
 ReactDOM.render(<App />, document.getElementById('app'));

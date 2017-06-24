@@ -1,11 +1,12 @@
 import React from 'react';
 
+/* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
-
 import { Button, Welcome } from '@storybook/react/demo';
 import { muiTheme } from 'storybook-addon-material-ui';
+/* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
 import FlatButton from 'material-ui/FlatButton';
 
