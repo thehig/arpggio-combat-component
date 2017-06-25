@@ -31,12 +31,13 @@ storiesOf('Combatant', module)
   .add('No-Props', () => <Combatant />)
   .add('Props', () => (
     <Combatant
-      name={text('Name', 'User-Name')}
+      name={text('Name', 'Aragorn')}
       hp={{
         current: number('Current HP', 50),
         max: number('Maximum HP', 100),
         temporary: number('Temporary HP', 15),
       }}
+      ac={number('Armor Class', 15)}
     />
   ))
   ;

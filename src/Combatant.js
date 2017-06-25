@@ -9,6 +9,7 @@ class Combatant extends React.Component {
       max: PropTypes.number,
       temporary: PropTypes.number,
     }),
+    ac: PropTypes.number,
   };
 
   static defaultProps = {
@@ -18,20 +19,32 @@ class Combatant extends React.Component {
       max: 0,
       temporary: 0,
     },
+    ac: 0,
   };
 
   render() {
-    const { name, hp: { current, max, temporary } } = this.props;
+    const {
+      name,
+      hp: {
+        current,
+        max,
+        temporary,
+      },
+      ac,
+    } = this.props;
+
     return (
-      <div>
-        Name: {name}
-        Hp:
-        <div>
-          Current: { current }
-          Max: { max }
-          Temporary: { temporary }
-        </div>
-      </div>
+      <ul>
+        <li>Name: {name}</li>
+        <li>Hp:
+          <ul>
+            <li>Current: { current }</li>
+            <li>Max: { max }</li>
+            <li>Temporary: { temporary }</li>
+          </ul>
+        </li>
+        <li>Armor Class: { ac }</li>
+      </ul>
     );
   }
 }
