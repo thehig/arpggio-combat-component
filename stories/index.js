@@ -40,4 +40,31 @@ storiesOf('Combatant', module)
       ac={number('Armor Class', 15)}
     />
   ))
+  .add('With Notes', () => (
+    <Combatant
+      name={text('Name', 'Aragorn')}
+      hp={{
+        current: number('Current HP', 50),
+        max: number('Maximum HP', 100),
+        temporary: number('Temporary HP', 15),
+      }}
+      ac={number('Armor Class', 15)}
+      notes={[
+        { text: 'Prone' },
+        {
+          text: 'Paralysed',
+          until: {
+            turn: 1,
+            startOfTurn: true,
+          },
+        },
+        {
+          text: 'Something',
+          until: {
+            turn: 4,
+          },
+        },
+      ]}
+    />
+  ))
   ;
