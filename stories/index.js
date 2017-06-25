@@ -7,6 +7,7 @@ import { muiTheme } from 'storybook-addon-material-ui';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
 import ArpggioCombatComponent from '../src/ArpggioCombatComponent';
+import Combatant from '../src/Combatant';
 
 import Card from '../src/dnd/Card';
 import Container from '../src/dnd/Container';
@@ -20,4 +21,9 @@ storiesOf('React Drag and Drop', module)
   .addDecorator(muiTheme())
   .add('Card', () => <Card />)
   .add('Container', () => <Container />)
+  ;
+
+storiesOf('Combatant', module)
+  .addDecorator(muiTheme())
+  .add('No-Props', () => <Combatant />)
   ;
