@@ -29,5 +29,14 @@ storiesOf('Combatant', module)
   .addDecorator(muiTheme())
   .addDecorator(withKnobs)
   .add('No-Props', () => <Combatant />)
-  .add('Name Props', () => <Combatant name={text('Name', 'User-Name')} />)
+  .add('Props', () => (
+    <Combatant
+      name={text('Name', 'User-Name')}
+      hp={{
+        current: number('Current HP', 50),
+        max: number('Maximum HP', 100),
+        temporary: number('Temporary HP', 15),
+      }}
+    />
+  ))
   ;
