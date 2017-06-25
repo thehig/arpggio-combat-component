@@ -3,6 +3,8 @@ import React from 'react';
 /* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
+import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
+
 import { muiTheme } from 'storybook-addon-material-ui';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
@@ -25,5 +27,7 @@ storiesOf('React Drag and Drop', module)
 
 storiesOf('Combatant', module)
   .addDecorator(muiTheme())
+  .addDecorator(withKnobs)
   .add('No-Props', () => <Combatant />)
+  .add('Name Props', () => <Combatant name={text('Name', 'User-Name')} />)
   ;
