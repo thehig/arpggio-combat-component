@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withKnobs, text, boolean, number } from '@storybook/addon-knobs';
+import { withKnobs, text, array, number, object, boolean } from '@storybook/addon-knobs';
 
 import { muiTheme } from 'storybook-addon-material-ui';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
@@ -28,8 +28,8 @@ storiesOf('React Drag and Drop', module)
 storiesOf('Combatant', module)
   .addDecorator(muiTheme())
   .addDecorator(withKnobs)
-  .add('No-Props', () => <Combatant />)
-  .add('Props', () => (
+  .add('no props', () => <Combatant />)
+  .add('name, hp, ac', () => (
     <Combatant
       name={text('Name', 'Aragorn')}
       hp={{
@@ -40,7 +40,7 @@ storiesOf('Combatant', module)
       ac={number('Armor Class', 15)}
     />
   ))
-  .add('With Notes', () => (
+  .add('note text', () => (
     <Combatant
       name={text('Name', 'Aragorn')}
       hp={{
@@ -50,18 +50,25 @@ storiesOf('Combatant', module)
       }}
       ac={number('Armor Class', 15)}
       notes={[
-        { text: 'Prone' },
+        { text: text('Text', 'Prone') },
+      ]}
+    />
+  ))
+  .add('note until', () => (
+    <Combatant
+      name={text('Name', 'Aragorn')}
+      hp={{
+        current: number('Current HP', 50),
+        max: number('Maximum HP', 100),
+        temporary: number('Temporary HP', 15),
+      }}
+      ac={number('Armor Class', 15)}
+      notes={[
         {
-          text: 'Paralysed',
+          text: text('Text', 'Prone'),
           until: {
-            turn: 1,
-            startOfTurn: true,
-          },
-        },
-        {
-          text: 'Something',
-          until: {
-            turn: 4,
+            turn: number('Turn', 1),
+            startOfTurn: boolean('Start of Turn', true),
           },
         },
       ]}
