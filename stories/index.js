@@ -40,7 +40,19 @@ storiesOf('Combatant', module)
       ac={number('Armor Class', 15)}
     />
   ))
-  .add('note text', () => (
+  .add('notes can be strings', () => (
+    <Combatant
+      name={text('Name', 'Aragorn')}
+      hp={{
+        current: number('Current HP', 50),
+        max: number('Maximum HP', 100),
+        temporary: number('Temporary HP', 15),
+      }}
+      ac={number('Armor Class', 15)}
+      notes={array('Notes', ['One', 'Two'])}
+    />
+  ))
+  .add('notes can have until.turn', () => (
     <Combatant
       name={text('Name', 'Aragorn')}
       hp={{
@@ -50,11 +62,16 @@ storiesOf('Combatant', module)
       }}
       ac={number('Armor Class', 15)}
       notes={[
-        { text: text('Text', 'Prone') },
+        object('Note', {
+          text: 'Prone',
+          until: {
+            turn: 1,
+          },
+        }),
       ]}
     />
   ))
-  .add('note until', () => (
+  .add('note.until start or end of turn', () => (
     <Combatant
       name={text('Name', 'Aragorn')}
       hp={{
@@ -64,13 +81,13 @@ storiesOf('Combatant', module)
       }}
       ac={number('Armor Class', 15)}
       notes={[
-        {
-          text: text('Text', 'Prone'),
+        object('Note', {
+          text: 'Prone',
           until: {
-            turn: number('Turn', 1),
-            startOfTurn: boolean('Start of Turn', true),
+            turn: 1,
+            startOfTurn: true,
           },
-        },
+        }),
       ]}
     />
   ))

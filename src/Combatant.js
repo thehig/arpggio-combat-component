@@ -11,13 +11,16 @@ class Combatant extends React.Component {
     }).isRequired,
     ac: PropTypes.number.isRequired,
     notes: PropTypes.arrayOf(
-      PropTypes.shape({
-        text: PropTypes.string.isRequired,
-        until: PropTypes.shape({
-          turn: PropTypes.number.isRequired,
-          startOfTurn: PropTypes.bool,
+      PropTypes.oneOfType([
+        PropTypes.string.isRequired,
+        PropTypes.shape({
+          text: PropTypes.string.isRequired,
+          until: PropTypes.shape({
+            turn: PropTypes.number.isRequired,
+            startOfTurn: PropTypes.bool,
+          }),
         }),
-      }),
+      ]),
     ),
   };
 
@@ -43,14 +46,17 @@ class Combatant extends React.Component {
       <li>
         Notes:
         <ul>
-          {notes.map(note => (
-            <li key={note.text}>
-              {note.text}
-              {note.until &&
-                ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`
-              }
-            </li>
-          ))}
+          {notes.map((note) => {
+            if (typeof note === 'string') return <li>{note}</li>;
+            return (
+              <li key={note.text}>
+                {note.text}
+                {note.until &&
+                  ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`
+                }
+              </li>
+            );
+          })}
         </ul>
       </li>
     );
