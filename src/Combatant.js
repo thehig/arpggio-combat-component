@@ -2,11 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Paper from 'material-ui/Paper';
+import Chip from 'material-ui/Chip';
+
 
 import { GridList, GridTile } from 'material-ui/GridList';
+import { List, ListItem } from 'material-ui/List';
 
 import Avatar from 'material-ui/Avatar';
-import CircularProgress from 'material-ui/CircularProgress';
+import LinearProgress from 'material-ui/LinearProgress';
 
 import Badge from 'material-ui/Badge';
 import ArmorClassIcon from 'material-ui/svg-icons/action/verified-user';
@@ -19,6 +22,19 @@ import {
   red500 as critical,
 } from 'material-ui/styles/colors';
 
+const styles = {
+  list: {
+  },
+  listItem: {
+  },
+  chip: {
+    margin: 4,
+  },
+  wrapper: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+};
 
 class Combatant extends React.Component {
   static propTypes = {
@@ -61,24 +77,35 @@ class Combatant extends React.Component {
 
   renderNotes(notes) {
     if (!notes || !notes.length) return <div />;
+
     return (
-      <li>
-        Notes:
-        <ul>
-          {notes.map((note) => {
-            if (typeof note === 'string') return <li>{note}</li>;
-            return (
-              <li key={note.text}>
-                {note.text}
-                {note.until &&
-                  ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`
-                }
-              </li>
-            );
-          })}
-        </ul>
-      </li>
+      <div style={styles.wrapper} >
+        {notes.map((note) => {
+          if (typeof note === 'string') return <Chip style={styles.chip}>{note}</Chip>;
+          return (
+            <Chip style={styles.chip}>
+              {note.text}
+              {note.until &&
+                ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`
+              }
+            </Chip>
+          );
+        })}
+      </div>
     );
+    
+
+
+    // return (
+    //   <Chip>Text</Chip>
+    // );
+    // return (
+    //   <li>
+    //     Notes:
+    //     <ul>
+    //     </ul>
+    //   </li>
+    // );
   }
 
   getStatus({ current, max }) {
@@ -103,30 +130,27 @@ class Combatant extends React.Component {
 
     const { color } = this.getStatus({ current, max });
 
-    const styles = {
-      root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space',
-      },
-      gridList: {
-        display: 'flex',
-        flexWrap: 'nowrap',
-        overflowX: 'auto',
-      },
-    };
-
     return (
-      <Paper style={styles.root}>
-        <GridList style={styles.gridList}>
+      <List
+        style={styles.list}
+      >
+        <ListItem
+          secondaryText={`${name} [${current}/${max}]`}
+          leftAvatar={<Avatar />}
+          style={styles.listItem}
+        >
+          <LinearProgress mode="determinate" min={0} max={max} value={current} color={color} />
+          {notes && this.renderNotes(notes)}
+        </ListItem>
+
+        {/*
+        <ListItem>
           <GridTile title={name} ><Avatar /></GridTile>
-          <GridTile title={`${current}/${max}`} ><CircularProgress mode="determinate" min={0} max={max} value={current} color={color} /></GridTile>
-          <GridTile title="Armor" ><Badge badgeContent={ac} primary><ArmorClassIcon /></Badge></GridTile>
-          <ul>
-            {notes && this.renderNotes(notes)}
-          </ul>
-        </GridList>
-      </Paper>
+            <GridTile title={`${current}/${max}`} ></GridTile>
+            <GridTile title="Armor" ><Badge badgeContent={ac} primary><ArmorClassIcon /></Badge></GridTile>
+        </ListItem>
+        */}
+      </List>
     );
   }
 }
