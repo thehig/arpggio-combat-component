@@ -1,18 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Paper from 'material-ui/Paper';
 import Chip from 'material-ui/Chip';
-
-
-import { GridList, GridTile } from 'material-ui/GridList';
-import { List, ListItem } from 'material-ui/List';
-
+import { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import LinearProgress from 'material-ui/LinearProgress';
-
-import Badge from 'material-ui/Badge';
-import ArmorClassIcon from 'material-ui/svg-icons/action/verified-user';
 
 // Colors http://www.material-ui.com/#/customization/colors
 import {
@@ -23,14 +15,12 @@ import {
 } from 'material-ui/styles/colors';
 
 const styles = {
-  list: {
-  },
   listItem: {
   },
   chip: {
     margin: 4,
   },
-  wrapper: {
+  chipWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
   },
@@ -39,11 +29,15 @@ const styles = {
 class Combatant extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
+    image: PropTypes.string,
     hp: PropTypes.shape({
       current: PropTypes.number.isRequired,
       max: PropTypes.number.isRequired,
-      temporary: PropTypes.number.isRequired,
     }).isRequired,
+    tempHp: PropTypes.shape({
+      current: PropTypes.number.isRequired,
+      max: PropTypes.number.isRequired,
+    }),
     ac: PropTypes.number.isRequired,
     notes: PropTypes.arrayOf(
       PropTypes.oneOfType([
@@ -60,26 +54,59 @@ class Combatant extends React.Component {
   };
 
   static defaultProps = {
-    name: 'Unknown',
+    name: 'Unnamed',
+    image: null,
     hp: {
       current: 0,
       max: 0,
-      temporary: 0,
     },
+    tempHp: null,
     ac: 0,
     notes: [],
   };
 
   constructor(props) {
     super(props);
+
+    this.getStatus = this.getStatus.bind(this);
+    this.createAvatar = this.createAvatar.bind(this);
+    this.createHpBar = this.createHpBar.bind(this);
     this.renderNotes = this.renderNotes.bind(this);
+  }
+
+  componentWillReceiveProps(newProps) {
+    /* eslint-disable no-param-reassign */
+
+    // Max Hp: max >= 0
+    newProps.hp.max = Math.max(0, newProps.hp.max);
+
+    // Current Hp: 0 <= current <= max
+    newProps.hp.current = Math.max(0, Math.min(newProps.hp.current, newProps.hp.max));
+
+    /* eslint-enable no-param-reassign */
+  }
+
+  getStatus({ current, max }) {
+    const percentageHealth = current / max;
+    if (percentageHealth >= 0.9) return { status: 'Healthy', color: healthy };
+    if (percentageHealth >= 0.5) return { status: 'Stable', color: stable };
+    if (percentageHealth >= 0.2) return { status: 'Bloodied', color: bloodied };
+    return { status: 'Critical', color: critical };
+  }
+
+  createAvatar({ image, name }) {
+    return image ? <Avatar src={image} /> : <Avatar>{name[0].toUpperCase()}</Avatar>;
+  }
+
+  createHpBar({ max, current, color }) {
+    return <LinearProgress mode="determinate" min={0} max={max} value={current} color={color} />;
   }
 
   renderNotes(notes) {
     if (!notes || !notes.length) return <div />;
 
     return (
-      <div style={styles.wrapper} >
+      <div style={styles.chipWrapper} >
         {notes.map((note) => {
           if (typeof note === 'string') return <Chip style={styles.chip}>{note}</Chip>;
           return (
@@ -93,36 +120,15 @@ class Combatant extends React.Component {
         })}
       </div>
     );
-    
-
-
-    // return (
-    //   <Chip>Text</Chip>
-    // );
-    // return (
-    //   <li>
-    //     Notes:
-    //     <ul>
-    //     </ul>
-    //   </li>
-    // );
-  }
-
-  getStatus({ current, max }) {
-    const percentageHealth = current / max;
-    if (percentageHealth >= 0.9) return { status: 'Healthy', color: healthy };
-    if (percentageHealth >= 0.5) return { status: 'Stable', color: stable };
-    if (percentageHealth >= 0.2) return { status: 'Bloodied', color: bloodied };
-    return { status: 'Critical', color: critical };
   }
 
   render() {
     const {
       name,
+      image,
       hp: {
         current,
         max,
-        temporary,
       },
       ac,
       notes,
@@ -131,26 +137,14 @@ class Combatant extends React.Component {
     const { color } = this.getStatus({ current, max });
 
     return (
-      <List
-        style={styles.list}
+      <ListItem
+        secondaryText={`${name} [${current}/${max}] AC(${ac})`}
+        leftAvatar={this.createAvatar({ image, name })}
+        style={styles.listItem}
       >
-        <ListItem
-          secondaryText={`${name} [${current}/${max}]`}
-          leftAvatar={<Avatar />}
-          style={styles.listItem}
-        >
-          <LinearProgress mode="determinate" min={0} max={max} value={current} color={color} />
-          {notes && this.renderNotes(notes)}
-        </ListItem>
-
-        {/*
-        <ListItem>
-          <GridTile title={name} ><Avatar /></GridTile>
-            <GridTile title={`${current}/${max}`} ></GridTile>
-            <GridTile title="Armor" ><Badge badgeContent={ac} primary><ArmorClassIcon /></Badge></GridTile>
-        </ListItem>
-        */}
-      </List>
+        {this.createHpBar({ max, current, color })}
+        {notes && this.renderNotes(notes)}
+      </ListItem>
     );
   }
 }
