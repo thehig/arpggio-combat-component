@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Paper from 'material-ui/Paper';
+import LinearProgress from 'material-ui/LinearProgress';
+import Slider from 'material-ui/Slider';
+import CircularProgress from 'material-ui/CircularProgress';
+
+
 class Combatant extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
@@ -62,6 +68,14 @@ class Combatant extends React.Component {
     );
   }
 
+  getStatus({ current, max }) {
+    const percentageHealth = current / max;
+    if (percentageHealth >= 0.9) return { status: 'Healthy', color: 'green' };
+    if (percentageHealth >= 0.5) return { status: 'Stable', color: 'yellow' };
+    if (percentageHealth >= 0.2) return { status: 'Bloodied', color: 'red' };
+    return { status: 'Critical', color: 'grey' };
+  }
+
   render() {
     const {
       name,
@@ -74,19 +88,20 @@ class Combatant extends React.Component {
       notes,
     } = this.props;
 
+    const { color } = this.getStatus({ current, max });
+
     return (
-      <ul>
-        <li>Name: {name}</li>
-        <li>Hp:
-          <ul>
-            <li>Current: {current}</li>
-            <li>Max: {max}</li>
-            <li>Temporary: {temporary}</li>
-          </ul>
-        </li>
-        <li>Armor Class: {ac}</li>
-        {notes && this.renderNotes(notes)}
-      </ul>
+      <Paper>
+        <ul>
+          <li>Name: {name}</li>
+          <li>Hp as linear progress <LinearProgress mode="determinate" min={0} max={max} value={current} color={color} /></li>
+          <li>Hp as circular progress <CircularProgress mode="determinate" min={0} max={max} value={current} color={color} /></li>
+          <li>Hp as Slider <Slider min={0} max={max} value={current} color={color} step={1} /></li>
+
+          <li>Armor Class: {ac}</li>
+          {notes && this.renderNotes(notes)}
+        </ul>
+      </Paper>
     );
   }
 }
