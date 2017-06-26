@@ -16,17 +16,85 @@ const combatantStories = storiesOf('Combatant', module)
 
 combatantStories.add('no props', () => <Combatant />);
 
-combatantStories.add('name, hp, ac', () => (
+combatantStories.add('default (name, hp, ac)', () => (
   <Combatant
-    name={text('Name', 'Aragorn')}
+    name={text('name', 'Aragorn')}
     hp={{
-      current: number('Current HP', 50),
-      max: number('Maximum HP', 100),
-      temporary: number('Temporary HP', 15),
+      current: number('current', 20),
+      max: number('max', 20),
     }}
-    ac={number('Armor Class', 15)}
+    ac={number('ac', 10)}
   />
 ));
+
+combatantStories.add('with image', () => (
+  <Combatant
+    name={text('name', 'Aragorn')}
+    image={text('image', 'https://avatarfiles.alphacoders.com/922/92296.jpg')}
+    hp={{
+      current: number('current', 15),
+      max: number('max', 20),
+    }}
+    ac={number('ac', 10)}
+  />
+));
+
+combatantStories.add('with notes (string array)', () => (
+  <Combatant
+    name={text('name', 'Aragorn')}
+    image={text('image', 'https://avatarfiles.alphacoders.com/922/92296.jpg')}
+    hp={{
+      current: number('current', 10),
+      max: number('max', 20),
+    }}
+    ac={number('ac', 10)}
+    notes={array('notes', ['DC18 Hidden', 'Prone'])}
+  />
+));
+
+combatantStories.add('note with trigger (end)', () => (
+  <Combatant
+    name={text('name', 'Aragorn')}
+    image={text('image', 'https://avatarfiles.alphacoders.com/922/92296.jpg')}
+    hp={{
+      current: number('current', 5),
+      max: number('max', 20),
+    }}
+    ac={number('ac', 10)}
+    notes={[
+      object('note', {
+        text: 'Blinded',
+        until: {
+          turn: 3,
+        },
+      }),
+    ]}
+  />
+));
+
+
+combatantStories.add('note with trigger (start)', () => (
+  <Combatant
+    name={text('name', 'Aragorn')}
+    image={text('image', 'https://avatarfiles.alphacoders.com/922/92296.jpg')}
+    hp={{
+      current: number('current', 1),
+      max: number('max', 20),
+    }}
+    ac={number('ac', 10)}
+    notes={[
+      object('note', {
+        text: 'Stunned',
+        until: {
+          turn: 3,
+          startOfTurn: true,
+        },
+      }),
+    ]}
+  />
+));
+
+/*
 
 combatantStories.add('notes can be strings', () => (
   <Combatant
@@ -81,3 +149,4 @@ combatantStories.add('note.until start or end of turn', () => (
     ]}
   />
 ));
+*/
