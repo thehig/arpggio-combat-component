@@ -1,46 +1,22 @@
 import React from 'react';
-import { List, ListItem } from 'material-ui/List';
-// import ContentInbox from 'material-ui/svg-icons/content/inbox';
-// import ActionGrade from 'material-ui/svg-icons/action/grade';
-// import ContentSend from 'material-ui/svg-icons/content/send';
-// import ContentDrafts from 'material-ui/svg-icons/content/drafts';
-// import Divider from 'material-ui/Divider';
-// import ActionInfo from 'material-ui/svg-icons/action/info';
-/*
-const ListExampleSimple = ({ action }) => (
-  <div>
-    <List>
-      <ListItem onTouchTap={action('ContentInbox')} primaryText="Inbox" leftIcon={<ContentInbox />} />
-      <ListItem onTouchTap={action('ActionGrade')} primaryText="Starred" leftIcon={<ActionGrade />} />
-      <ListItem onTouchTap={action('ContentSend')} primaryText="Sent mail" leftIcon={<ContentSend />} />
-      <ListItem onTouchTap={action('ContentDrafts')} primaryText="Drafts" leftIcon={<ContentDrafts />} />
-      <ListItem onTouchTap={action('ContentInbox')} primaryText="Inbox" leftIcon={<ContentInbox />} />
-    </List>
-    <Divider />
-    <List>
-      <ListItem primaryText="All mail" rightIcon={<ActionInfo />} />
-      <ListItem primaryText="Trash" rightIcon={<ActionInfo />} />
-      <ListItem primaryText="Spam" rightIcon={<ActionInfo />} />
-      <ListItem primaryText="Follow up" rightIcon={<ActionInfo />} />
-    </List>
-  </div>
-);
-export default ListExampleSimple;
-*/
+import { List } from 'material-ui/List';
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
 
-const Player = ({ name }) => (
-  <div>Player {name}</div>
-);
+
+import Combatant from './Combatant';
 
 const ActionBar = () => (
   <div>Action Bar</div>
 );
 
 const CombatList = ({ children }) => (
-  <div>
-    Combat List
+  <List>
+    <Subheader>Combat List</Subheader>
+    <Divider />
     { children && children }
-  </div>
+    <Divider />
+  </List>
 );
 
 const CombatComponent = () => (
@@ -48,9 +24,9 @@ const CombatComponent = () => (
     Combat Component
     <ActionBar />
     <CombatList>
-      <Player name="Andrew" />
-      <Player name="Brian" />
-      <Player name="Charlie" />
+      <Combatant name="Aragorn" ac={16} hp={{ max: 30, current: 10 }} image="https://avatarfiles.alphacoders.com/922/92296.jpg" />
+      <Combatant name="Legolas" ac={19} hp={{ max: 55, current: 54 }} image="http://orig14.deviantart.net/e1c5/f/2011/087/7/f/legolas_avatar_by_angelprincess101-d3conn4.png" />
+      <Combatant name="Gimli" ac={11} hp={{ max: 75, current: 14 }} image="https://68.media.tumblr.com/avatar_b4d8059d2a39_128.png" />
     </CombatList>
   </div>
 );
