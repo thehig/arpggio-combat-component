@@ -4977,6 +4977,12 @@ material-colors@^1.2.1:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/material-colors/-/material-colors-1.2.5.tgz#5292593e6754cb1bcc2b98030e4e0d6a3afc9ea1"
 
+material-ui-chip-input@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/material-ui-chip-input/-/material-ui-chip-input-0.15.0.tgz#d44b46f28885b27e8ffeafc3e321c05832825ecf"
+  dependencies:
+    prop-types "^15.5.7"
+
 material-ui@^0.18.3:
   version "0.18.3"
   resolved "https://registry.yarnpkg.com/material-ui/-/material-ui-0.18.3.tgz#db1cf7190b322b304867e7ffb96b17ef79443bc9"

@@ -29,6 +29,7 @@ combatantStories.add('default (name, hp, ac)', () => (
       max: number('max', 20),
     }}
     ac={number('ac', 10)}
+    editable={boolean('editable', false)}
   />
 ));
 
@@ -41,6 +42,7 @@ combatantStories.add('with image', () => (
       max: number('max', 20),
     }}
     ac={number('ac', 10)}
+    editable={boolean('editable', false)}
   />
 ));
 
@@ -53,6 +55,7 @@ combatantStories.add('with notes (string array)', () => (
       max: number('max', 20),
     }}
     ac={number('ac', 10)}
+    editable={boolean('editable', false)}
     notes={array('notes', ['DC18 Hidden', 'Prone'])}
   />
 ));
@@ -66,6 +69,7 @@ combatantStories.add('note with trigger (end)', () => (
       max: number('max', 20),
     }}
     ac={number('ac', 10)}
+    editable={boolean('editable', false)}
     notes={[
       object('note', {
         text: 'Blinded',
@@ -87,6 +91,7 @@ combatantStories.add('note with trigger (start)', () => (
       max: number('max', 20),
     }}
     ac={number('ac', 10)}
+    editable={boolean('editable', false)}
     notes={[
       object('note', {
         text: 'Stunned',
@@ -107,6 +112,7 @@ combatantStories.add('supports override of styling', () => (
       max: number('max', 20),
     }}
     ac={number('ac', 10)}
+    editable={boolean('editable', false)}
     notes={array('notes', ['DC18 Hidden', 'Prone'])}
     styles={object('styles', {
       avatar: {
@@ -121,7 +127,7 @@ combatantStories.add('supports override of styling', () => (
   />
 ));
 
-combatantStories.add('editable uses slider', () => (
+combatantStories.add('editable uses slider for hp', () => (
   <Combatant
     name={text('name', 'Aragorn')}
     hp={{
@@ -132,7 +138,26 @@ combatantStories.add('editable uses slider', () => (
     editable={boolean('editable', true)}
     actions={{
       // Remove the synthetic event and return the value
-      setHealth: synthAction('setHealth'),
+      onChangeHealth: synthAction('onChangeHealth'),
+    }}
+  />
+));
+
+combatantStories.add('editable uses chipInput for notes', () => (
+  <Combatant
+    name={text('name', 'Aragorn')}
+    hp={{
+      current: number('current', 20),
+      max: number('max', 20),
+    }}
+    ac={number('ac', 10)}
+    editable={boolean('editable', true)}
+    notes={array('notes', ['DC18 Hidden', 'Prone'])}
+    actions={{
+      // Remove the synthetic event and return the value
+      onChangeHealth: synthAction('onChangeHealth'),
+      onRequestAddChip: action('onRequestAddChip'),
+      onRequestDeleteChip: action('onRequestDeleteChip'),
     }}
   />
 ));

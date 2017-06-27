@@ -1,11 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Chip from 'material-ui/Chip';
 import { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
+
+// Non-editable
 import LinearProgress from 'material-ui/LinearProgress';
+import Chip from 'material-ui/Chip';
+
+// Editable
 import Slider from 'material-ui/Slider';
+import ChipInput from 'material-ui-chip-input';
 
 
 // Colors http://www.material-ui.com/#/customization/colors
@@ -44,7 +49,9 @@ class Combatant extends React.Component {
     ),
     styles: PropTypes.object,
     actions: PropTypes.shape({
-      setHealth: PropTypes.func,
+      onChangeHealth: PropTypes.func,
+      onRequestAddChip: PropTypes.func,
+      onRequestDeleteChip: PropTypes.func,
     }),
   };
 
@@ -70,9 +77,14 @@ class Combatant extends React.Component {
         display: 'flex',
         flexWrap: 'wrap',
       },
+      chipInput: {
+        width: '100%',
+      },
     },
     actions: {
-      setHealth: () => {},
+      onChangeHealth: () => {},
+      onRequestAddChip: () => {},
+      onRequestDeleteChip: () => {},
     },
   };
 
@@ -130,36 +142,34 @@ class Combatant extends React.Component {
   }
 
   createHpBar() {
-    const { editable, hp: { max, current }, actions: { setHealth } } = this.props;
+    const { editable, hp: { max, current }, actions: { onChangeHealth } } = this.props;
 
     const { color } = this.getStatus({ hp: { max, current } });
     if (editable) {
       // style={this.getStyle('slider')}
-      return <Slider step={1} min={0} max={max} value={current} color={color} onChange={setHealth} />;
+      return <Slider step={1} min={0} max={max} value={current} color={color} onChange={onChangeHealth} />;
     }
     return <LinearProgress style={this.getStyle('hp')} mode="determinate" min={0} max={max} value={current} color={color} />;
   }
 
   renderNotes() {
-    const { notes } = this.props;
+    const { notes, editable, actions: { onRequestAddChip, onRequestDeleteChip } } = this.props;
 
     if (!notes || !notes.length) return <div />;
 
-    return (
-      <div style={this.getStyle('chipWrapper')} >
-        {notes.map((note) => {
-          if (typeof note === 'string') return <Chip style={this.getStyle('chip')} key={note} >{note}</Chip>;
-          return (
-            <Chip style={this.getStyle('chip')} key={note.text} >
-              {note.text}
-              {note.until &&
-                ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`
-              }
-            </Chip>
-          );
-        })}
-      </div>
+    const noteStrings = notes.map(note =>
+      typeof note === 'string'
+        ? note
+        : `${note.text}${note.until && ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`}`
     );
+
+    return editable
+      ? <ChipInput value={noteStrings} onRequestAdd={onRequestAddChip} onRequestDelete={onRequestDeleteChip} style={this.getStyle('chipInput')} />
+      : (
+        <div style={this.getStyle('chipWrapper')} >
+          {noteStrings.map(note => <Chip style={this.getStyle('chip')} key={note} >{note}</Chip>)}
+        </div>
+      );
   }
 
   render() {
