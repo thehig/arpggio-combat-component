@@ -1,14 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Chip from 'material-ui/Chip';
+import { ListItem } from 'material-ui/List';
+import Avatar from 'material-ui/Avatar';
+import LinearProgress from 'material-ui/LinearProgress';
+
+// Colors http://www.material-ui.com/#/customization/colors
+import {
+  green400 as healthy,
+  lightGreen400 as stable,
+  amber500 as bloodied,
+  red500 as critical,
+} from 'material-ui/styles/colors';
+
 class Combatant extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
+    image: PropTypes.string,
     hp: PropTypes.shape({
       current: PropTypes.number.isRequired,
       max: PropTypes.number.isRequired,
-      temporary: PropTypes.number.isRequired,
     }).isRequired,
+    tempHp: PropTypes.shape({
+      current: PropTypes.number.isRequired,
+      max: PropTypes.number.isRequired,
+    }),
     ac: PropTypes.number.isRequired,
     notes: PropTypes.arrayOf(
       PropTypes.oneOfType([
@@ -22,43 +39,112 @@ class Combatant extends React.Component {
         }),
       ]),
     ),
+    styles: PropTypes.object,
   };
 
   static defaultProps = {
-    name: 'Unknown',
+    name: 'Unnamed',
+    image: null,
     hp: {
       current: 0,
       max: 0,
-      temporary: 0,
     },
+    tempHp: null,
     ac: 0,
     notes: [],
+    styles: {
+      listItem: {},
+      avatar: {},
+      hp: {},
+      chip: {
+        margin: 4,
+      },
+      chipWrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
+    },
   };
 
   constructor(props) {
     super(props);
+
+    this.getStatus = this.getStatus.bind(this);
+    this.getStyle = this.getStyle.bind(this);
+    this.createAvatar = this.createAvatar.bind(this);
+    this.createHpBar = this.createHpBar.bind(this);
     this.renderNotes = this.renderNotes.bind(this);
   }
 
-  renderNotes(notes) {
+  componentWillReceiveProps(newProps) {
+    /* eslint-disable no-param-reassign */
+
+    // Max Hp: max >= 0
+    newProps.hp.max = Math.max(0, newProps.hp.max);
+
+    // Current Hp: 0 <= current <= max
+    newProps.hp.current = Math.max(0, Math.min(newProps.hp.current, newProps.hp.max));
+
+    /* eslint-enable no-param-reassign */
+  }
+
+  getStatus() {
+    const { hp: { current, max } } = this.props;
+
+    const percentageHealth = current / max;
+    if (percentageHealth >= 0.9) return { status: 'Healthy', color: healthy };
+    if (percentageHealth >= 0.5) return { status: 'Stable', color: stable };
+    if (percentageHealth >= 0.2) return { status: 'Bloodied', color: bloodied };
+    return { status: 'Critical', color: critical };
+  }
+
+  getStyle(key) {
+    const { styles } = this.props;
+
+    // If this key is in the instance styles, return that style
+    const styleProvided = Object.prototype.hasOwnProperty.call(styles, key);
+    if (styleProvided) return styles[key];
+
+    // If this key is in the default styles, return that style
+    const defaultProvided = Object.prototype.hasOwnProperty.call(Combatant.defaultProps.styles, key);
+    if (defaultProvided) return Combatant.defaultProps.styles[key];
+
+    console.warn(`Combatant attempted to access unrecognised styles.key: ${key}`);
+    return null;
+  }
+
+  createAvatar() {
+    const { image, name } = this.props;
+
+    return image ? <Avatar style={this.getStyle('avatar')} src={image} /> : <Avatar style={this.getStyle('avatar')} >{name[0].toUpperCase()}</Avatar>;
+  }
+
+  createHpBar() {
+    const { hp: { max, current } } = this.props;
+
+    const { color } = this.getStatus({ hp: { max, current } });
+    return <LinearProgress style={this.getStyle('hp')} mode="determinate" min={0} max={max} value={current} color={color} />;
+  }
+
+  renderNotes() {
+    const { notes } = this.props;
+
     if (!notes || !notes.length) return <div />;
+
     return (
-      <li>
-        Notes:
-        <ul>
-          {notes.map((note) => {
-            if (typeof note === 'string') return <li>{note}</li>;
-            return (
-              <li key={note.text}>
-                {note.text}
-                {note.until &&
-                  ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`
-                }
-              </li>
-            );
-          })}
-        </ul>
-      </li>
+      <div style={this.getStyle('chipWrapper')} >
+        {notes.map((note) => {
+          if (typeof note === 'string') return <Chip style={this.getStyle('chip')} key={note} >{note}</Chip>;
+          return (
+            <Chip style={this.getStyle('chip')} key={note.text} >
+              {note.text}
+              {note.until &&
+                ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`
+              }
+            </Chip>
+          );
+        })}
+      </div>
     );
   }
 
@@ -68,25 +154,21 @@ class Combatant extends React.Component {
       hp: {
         current,
         max,
-        temporary,
       },
       ac,
-      notes,
+      styles,
     } = this.props;
 
+
     return (
-      <ul>
-        <li>Name: {name}</li>
-        <li>Hp:
-          <ul>
-            <li>Current: {current}</li>
-            <li>Max: {max}</li>
-            <li>Temporary: {temporary}</li>
-          </ul>
-        </li>
-        <li>Armor Class: {ac}</li>
-        {notes && this.renderNotes(notes)}
-      </ul>
+      <ListItem
+        secondaryText={`${name} [${current}/${max}] AC(${ac})`}
+        leftAvatar={this.createAvatar()}
+        style={styles.listItem}
+      >
+        {this.createHpBar()}
+        {this.renderNotes()}
+      </ListItem>
     );
   }
 }
