@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import update from 'react/lib/update';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
+// import TouchBackend from 'react-dnd-touch-backend';
+
 import Card from './Card';
 
 const style = {
   width: 400,
 };
 
+// @DragDropContext(TouchBackend)
 @DragDropContext(HTML5Backend)
 export default class Container extends Component {
   constructor(props) {
