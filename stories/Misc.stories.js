@@ -15,8 +15,6 @@ import Reorderable from '../src/reorderable/index';
 
 const { ReorderableList, ReorderableListItem } = Reorderable;
 
-console.log('Reorderable', ReorderableList);
-
 storiesOf('ArpggioCombatComponent', module)
   .addDecorator(muiTheme())
   .add('No-Props', () => <ArpggioCombatComponent action={action} />)

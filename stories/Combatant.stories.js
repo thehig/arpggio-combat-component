@@ -2,13 +2,18 @@ import React from 'react';
 
 /* eslint-disable import/no-unresolved, import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
+import { action, decorateAction } from '@storybook/addon-actions';
 import { withKnobs, text, array, number, object, boolean } from '@storybook/addon-knobs';
 
 import { muiTheme } from 'storybook-addon-material-ui';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
 import Combatant from '../src/Combatant';
+
+// Remove the synthetic event and return the value
+const synthAction = decorateAction([
+  args => args.slice(1),
+]);
 
 const combatantStories = storiesOf('Combatant', module)
   .addDecorator(muiTheme())
@@ -113,5 +118,21 @@ combatantStories.add('supports override of styling', () => (
         justifyContent: 'flex-end',
       },
     })}
+  />
+));
+
+combatantStories.add('editable uses slider', () => (
+  <Combatant
+    name={text('name', 'Aragorn')}
+    hp={{
+      current: number('current', 20),
+      max: number('max', 20),
+    }}
+    ac={number('ac', 10)}
+    editable={boolean('editable', true)}
+    actions={{
+      // Remove the synthetic event and return the value
+      setHealth: synthAction('setHealth'),
+    }}
   />
 ));

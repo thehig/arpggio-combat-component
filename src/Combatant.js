@@ -5,6 +5,8 @@ import Chip from 'material-ui/Chip';
 import { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import LinearProgress from 'material-ui/LinearProgress';
+import Slider from 'material-ui/Slider';
+
 
 // Colors http://www.material-ui.com/#/customization/colors
 import {
@@ -16,6 +18,7 @@ import {
 
 class Combatant extends React.Component {
   static propTypes = {
+    editable: PropTypes.bool,
     name: PropTypes.string.isRequired,
     image: PropTypes.string,
     hp: PropTypes.shape({
@@ -40,9 +43,13 @@ class Combatant extends React.Component {
       ]),
     ),
     styles: PropTypes.object,
+    actions: PropTypes.shape({
+      setHealth: PropTypes.func,
+    }),
   };
 
   static defaultProps = {
+    editable: false,
     name: 'Unnamed',
     image: null,
     hp: {
@@ -63,6 +70,9 @@ class Combatant extends React.Component {
         display: 'flex',
         flexWrap: 'wrap',
       },
+    },
+    actions: {
+      setHealth: () => {},
     },
   };
 
@@ -120,9 +130,13 @@ class Combatant extends React.Component {
   }
 
   createHpBar() {
-    const { hp: { max, current } } = this.props;
+    const { editable, hp: { max, current }, actions: { setHealth } } = this.props;
 
     const { color } = this.getStatus({ hp: { max, current } });
+    if (editable) {
+      // style={this.getStyle('slider')}
+      return <Slider step={1} min={0} max={max} value={current} color={color} onChange={setHealth} />;
+    }
     return <LinearProgress style={this.getStyle('hp')} mode="determinate" min={0} max={max} value={current} color={color} />;
   }
 
