@@ -14,18 +14,6 @@ import {
   red500 as critical,
 } from 'material-ui/styles/colors';
 
-const styles = {
-  listItem: {
-  },
-  chip: {
-    margin: 4,
-  },
-  chipWrapper: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-};
-
 class Combatant extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
@@ -51,6 +39,7 @@ class Combatant extends React.Component {
         }),
       ]),
     ),
+    styles: PropTypes.object,
   };
 
   static defaultProps = {
@@ -63,12 +52,25 @@ class Combatant extends React.Component {
     tempHp: null,
     ac: 0,
     notes: [],
+    styles: {
+      listItem: {},
+      avatar: {},
+      hp: {},
+      chip: {
+        margin: 4,
+      },
+      chipWrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
+    },
   };
 
   constructor(props) {
     super(props);
 
     this.getStatus = this.getStatus.bind(this);
+    this.getStyle = this.getStyle.bind(this);
     this.createAvatar = this.createAvatar.bind(this);
     this.createHpBar = this.createHpBar.bind(this);
     this.renderNotes = this.renderNotes.bind(this);
@@ -86,7 +88,9 @@ class Combatant extends React.Component {
     /* eslint-enable no-param-reassign */
   }
 
-  getStatus({ current, max }) {
+  getStatus() {
+    const { hp: { current, max } } = this.props;
+
     const percentageHealth = current / max;
     if (percentageHealth >= 0.9) return { status: 'Healthy', color: healthy };
     if (percentageHealth >= 0.5) return { status: 'Stable', color: stable };
@@ -94,23 +98,45 @@ class Combatant extends React.Component {
     return { status: 'Critical', color: critical };
   }
 
-  createAvatar({ image, name }) {
-    return image ? <Avatar src={image} /> : <Avatar>{name[0].toUpperCase()}</Avatar>;
+  getStyle(key) {
+    const { styles } = this.props;
+
+    // If this key is in the instance styles, return that style
+    const styleProvided = Object.prototype.hasOwnProperty.call(styles, key);
+    if (styleProvided) return styles[key];
+
+    // If this key is in the default styles, return that style
+    const defaultProvided = Object.prototype.hasOwnProperty.call(Combatant.defaultProps.styles, key);
+    if (defaultProvided) return Combatant.defaultProps.styles[key];
+
+    console.warn(`Combatant attempted to access unrecognised styles.key: ${key}`);
+    return null;
   }
 
-  createHpBar({ max, current, color }) {
-    return <LinearProgress mode="determinate" min={0} max={max} value={current} color={color} />;
+  createAvatar() {
+    const { image, name } = this.props;
+
+    return image ? <Avatar style={this.getStyle('avatar')} src={image} /> : <Avatar style={this.getStyle('avatar')} >{name[0].toUpperCase()}</Avatar>;
   }
 
-  renderNotes(notes) {
+  createHpBar() {
+    const { hp: { max, current } } = this.props;
+
+    const { color } = this.getStatus({ hp: { max, current } });
+    return <LinearProgress style={this.getStyle('hp')} mode="determinate" min={0} max={max} value={current} color={color} />;
+  }
+
+  renderNotes() {
+    const { notes } = this.props;
+
     if (!notes || !notes.length) return <div />;
 
     return (
-      <div style={styles.chipWrapper} >
+      <div style={this.getStyle('chipWrapper')} >
         {notes.map((note) => {
-          if (typeof note === 'string') return <Chip style={styles.chip}>{note}</Chip>;
+          if (typeof note === 'string') return <Chip style={this.getStyle('chip')} key={note} >{note}</Chip>;
           return (
-            <Chip style={styles.chip}>
+            <Chip style={this.getStyle('chip')} key={note.text} >
               {note.text}
               {note.until &&
                 ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`
@@ -125,25 +151,23 @@ class Combatant extends React.Component {
   render() {
     const {
       name,
-      image,
       hp: {
         current,
         max,
       },
       ac,
-      notes,
+      styles,
     } = this.props;
 
-    const { color } = this.getStatus({ current, max });
 
     return (
       <ListItem
         secondaryText={`${name} [${current}/${max}] AC(${ac})`}
-        leftAvatar={this.createAvatar({ image, name })}
+        leftAvatar={this.createAvatar()}
         style={styles.listItem}
       >
-        {this.createHpBar({ max, current, color })}
-        {notes && this.renderNotes(notes)}
+        {this.createHpBar()}
+        {this.renderNotes()}
       </ListItem>
     );
   }

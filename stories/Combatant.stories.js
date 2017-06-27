@@ -94,59 +94,24 @@ combatantStories.add('note with trigger (start)', () => (
   />
 ));
 
-/*
-
-combatantStories.add('notes can be strings', () => (
+combatantStories.add('supports override of styling', () => (
   <Combatant
-    name={text('Name', 'Aragorn')}
+    name={text('name', 'Aragorn')}
     hp={{
-      current: number('Current HP', 50),
-      max: number('Maximum HP', 100),
-      temporary: number('Temporary HP', 15),
+      current: number('current', 15),
+      max: number('max', 20),
     }}
-    ac={number('Armor Class', 15)}
-    notes={array('Notes', ['One', 'Two'])}
+    ac={number('ac', 10)}
+    notes={array('notes', ['DC18 Hidden', 'Prone'])}
+    styles={object('styles', {
+      avatar: {
+        display: 'none',
+      },
+      chipWrapper: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'flex-end',
+      },
+    })}
   />
 ));
-
-combatantStories.add('notes can have until.turn', () => (
-  <Combatant
-    name={text('Name', 'Aragorn')}
-    hp={{
-      current: number('Current HP', 50),
-      max: number('Maximum HP', 100),
-      temporary: number('Temporary HP', 15),
-    }}
-    ac={number('Armor Class', 15)}
-    notes={[
-      object('Note', {
-        text: 'Prone',
-        until: {
-          turn: 1,
-        },
-      }),
-    ]}
-  />
-));
-
-combatantStories.add('note.until start or end of turn', () => (
-  <Combatant
-    name={text('Name', 'Aragorn')}
-    hp={{
-      current: number('Current HP', 50),
-      max: number('Maximum HP', 100),
-      temporary: number('Temporary HP', 15),
-    }}
-    ac={number('Armor Class', 15)}
-    notes={[
-      object('Note', {
-        text: 'Prone',
-        until: {
-          turn: 1,
-          startOfTurn: true,
-        },
-      }),
-    ]}
-  />
-));
-*/
