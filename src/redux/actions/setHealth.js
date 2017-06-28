@@ -1,6 +1,6 @@
 import {
   SET_HEALTH,
-} from './constants';
+} from '../constants';
 
 export function setHealth(player, hp) {
   return {

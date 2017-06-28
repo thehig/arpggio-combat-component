@@ -2,7 +2,7 @@ import React from 'react';
 import { createStore } from 'redux';
 import { Provider as ReduxProvider } from 'react-redux';
 import Immutable from 'immutable';
-import { reducer as setHealth, getHealth } from './setHealth';
+import { reducers } from './index';
 
 // Initial State
 export const initialState = Immutable.fromJS({
@@ -10,17 +10,7 @@ export const initialState = Immutable.fromJS({
   inProgress: false,
 });
 
-// Selectors
-export const selectors = {
-  getHealth,
-};
-
-// Reducers
-export const reducers = [
-  setHealth,
-];
-
-// Merge reducers together
+// Combine Reducers
 export function rootReducer(state, action) {
   let newState;
   switch (action.type) {
@@ -38,6 +28,7 @@ export function configureStore() {
   const store = createStore(rootReducer, initialState,
     window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   );
+
   return store;
 }
 /* eslint-enable */
