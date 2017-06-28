@@ -77,9 +77,7 @@ class Combatant extends React.Component {
         display: 'flex',
         flexWrap: 'wrap',
       },
-      chipInput: {
-        width: '100%',
-      },
+      chipInput: {},
     },
     actions: {
       onChangeHealth: () => {},
@@ -155,16 +153,17 @@ class Combatant extends React.Component {
   renderNotes() {
     const { notes, editable, actions: { onRequestAddChip, onRequestDeleteChip } } = this.props;
 
-    if (!notes || !notes.length) return <div />;
+    if (!notes || !notes.length || notes.length === 0) return <div />;
 
-    const noteStrings = notes.map(note =>
-      typeof note === 'string'
-        ? note
-        : `${note.text}${note.until && ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`}`
-    );
+    const noteStrings = notes
+      .map(note =>
+        typeof note === 'string'
+          ? note
+          : `${note.text}${note.until && ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`}`
+      );
 
     return editable
-      ? <ChipInput value={noteStrings} onRequestAdd={onRequestAddChip} onRequestDelete={onRequestDeleteChip} style={this.getStyle('chipInput')} />
+      ? <ChipInput fullWidth fullWidthInput value={noteStrings} onRequestAdd={onRequestAddChip} onRequestDelete={onRequestDeleteChip} style={this.getStyle('chipInput')} />
       : (
         <div style={this.getStyle('chipWrapper')} >
           {noteStrings.map(note => <Chip style={this.getStyle('chip')} key={note} >{note}</Chip>)}

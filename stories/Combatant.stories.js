@@ -152,9 +152,8 @@ combatantStories.add('editable uses chipInput for notes', () => (
     }}
     ac={number('ac', 10)}
     editable={boolean('editable', true)}
-    notes={array('notes', ['DC18 Hidden', 'Prone'])}
+    notes={array('notes', ['A', 'B', 'C'])}
     actions={{
-      // Remove the synthetic event and return the value
       onChangeHealth: synthAction('onChangeHealth'),
       onRequestAddChip: action('onRequestAddChip'),
       onRequestDeleteChip: action('onRequestDeleteChip'),
