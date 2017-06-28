@@ -8,7 +8,7 @@ import { muiTheme } from 'storybook-addon-material-ui';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
 import ArpggioCombatComponent from '../src/ArpggioCombatComponent';
-import Provider from '../src/redux/Provider';
+import Provider from '../src/redux/store';
 
 
 storiesOf('ArpggioCombatComponent', module)

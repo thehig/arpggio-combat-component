@@ -21,6 +21,6 @@ export function reducer(state, action) {
   }
 }
 
-export function getHealthState(state) {
+export function getHealth(state) {
   return state.get('hp');
 }
