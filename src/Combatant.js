@@ -12,6 +12,15 @@ import Chip from 'material-ui/Chip';
 import Slider from 'material-ui/Slider';
 import ChipInput from 'material-ui-chip-input';
 
+// Nested Items
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
+
+// Icons
+import ActiveIcon from 'material-ui/svg-icons/action/grade';
+import EyeIcon from 'material-ui/svg-icons/image/remove-red-eye';
+
+
 
 // Colors http://www.material-ui.com/#/customization/colors
 import {
@@ -19,6 +28,7 @@ import {
   lightGreen400 as stable,
   amber500 as bloodied,
   red500 as critical,
+  lightBlue200 as activeBackground,
 } from 'material-ui/styles/colors';
 
 class Combatant extends React.Component {
@@ -53,6 +63,7 @@ class Combatant extends React.Component {
       onRequestAddChip: PropTypes.func,
       onRequestDeleteChip: PropTypes.func,
     }),
+    active: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -84,6 +95,7 @@ class Combatant extends React.Component {
       onRequestAddChip: () => {},
       onRequestDeleteChip: () => {},
     },
+    active: false,
   };
 
   constructor(props) {
@@ -153,7 +165,8 @@ class Combatant extends React.Component {
   renderNotes() {
     const { notes, editable, actions: { onRequestAddChip, onRequestDeleteChip } } = this.props;
 
-    if (!notes || !notes.length || notes.length === 0) return <div />;
+    // Show the notes if we are editable, or there are notes
+    if (!editable && (!notes || !notes.length || notes.length === 0)) return <div />;
 
     const noteStrings = notes
       .map(note =>
@@ -163,7 +176,7 @@ class Combatant extends React.Component {
       );
 
     return editable
-      ? <ChipInput fullWidth fullWidthInput value={noteStrings} onRequestAdd={onRequestAddChip} onRequestDelete={onRequestDeleteChip} style={this.getStyle('chipInput')} />
+      ? <ChipInput fullWidth value={noteStrings} onRequestAdd={onRequestAddChip} onRequestDelete={onRequestDeleteChip} style={this.getStyle('chipInput')} />
       : (
         <div style={this.getStyle('chipWrapper')} >
           {noteStrings.map(note => <Chip style={this.getStyle('chip')} key={note} >{note}</Chip>)}
@@ -180,15 +193,31 @@ class Combatant extends React.Component {
       },
       ac,
       styles,
+      active,
+      editable,
     } = this.props;
 
 
+    const listProps = {
+      secondaryText: `${name} [${current}/${max}] AC(${ac})`,
+      leftAvatar: this.createAvatar(),
+      style: styles.listItem,
+    };
+
+    if (active) {
+      listProps.rightIcon = <ActiveIcon />;
+    }
+
+    if (editable) {
+      listProps.nestedItems = [
+        <ListItem primaryText="Toggle Visibility" rightIcon={<EyeIcon />} />,
+        <Divider />,
+      ];
+      listProps.initiallyOpen = true;
+    }
+
     return (
-      <ListItem
-        secondaryText={`${name} [${current}/${max}] AC(${ac})`}
-        leftAvatar={this.createAvatar()}
-        style={styles.listItem}
-      >
+      <ListItem {...listProps} >
         {this.createHpBar()}
         {this.renderNotes()}
       </ListItem>
