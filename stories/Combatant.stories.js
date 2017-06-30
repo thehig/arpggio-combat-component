@@ -8,6 +8,10 @@ import { withKnobs, text, array, number, object, boolean } from '@storybook/addo
 import { muiTheme } from 'storybook-addon-material-ui';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
 
+import EyeIcon from 'material-ui/svg-icons/image/remove-red-eye';
+import { ListItem } from 'material-ui/List';
+import Toggle from 'material-ui/Toggle';
+
 import Combatant from '../src/Combatant';
 
 // Remove the synthetic event and return the value
@@ -45,6 +49,21 @@ combatantStories.add('with image', () => (
     editable={boolean('editable', false)}
   />
 ));
+
+combatantStories.add('active', () => (
+  <Combatant
+    name={text('name', 'Aragorn')}
+    image={text('image', 'https://avatarfiles.alphacoders.com/922/92296.jpg')}
+    hp={{
+      current: number('current', 15),
+      max: number('max', 20),
+    }}
+    ac={number('ac', 10)}
+    editable={boolean('editable', false)}
+    active={boolean('active', true)}
+  />
+));
+
 
 combatantStories.add('with notes (string array)', () => (
   <Combatant
@@ -158,5 +177,31 @@ combatantStories.add('editable uses chipInput for notes', () => (
       onRequestAddChip: action('onRequestAddChip'),
       onRequestDeleteChip: action('onRequestDeleteChip'),
     }}
+  />
+));
+
+combatantStories.add('editable & nested items', () => (
+  <Combatant
+    name={text('name', 'Aragorn')}
+    hp={{
+      current: number('current', 20),
+      max: number('max', 20),
+    }}
+    ac={number('ac', 10)}
+    editable={boolean('editable', true)}
+    active={boolean('active', true)}
+    notes={array('notes', [])}
+    actions={{
+      onChangeHealth: synthAction('onChangeHealth'),
+      onRequestAddChip: action('onRequestAddChip'),
+      onRequestDeleteChip: action('onRequestDeleteChip'),
+    }}
+    nestedItems={[
+      <ListItem
+        secondaryText="Visible to Players"
+        rightToggle={<Toggle />}
+        onTouchTap={action('onToggleVisibility')}
+      />,
+    ]}
   />
 ));

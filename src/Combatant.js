@@ -18,9 +18,6 @@ import Divider from 'material-ui/Divider';
 
 // Icons
 import ActiveIcon from 'material-ui/svg-icons/action/grade';
-import EyeIcon from 'material-ui/svg-icons/image/remove-red-eye';
-
-
 
 // Colors http://www.material-ui.com/#/customization/colors
 import {
@@ -64,6 +61,7 @@ class Combatant extends React.Component {
       onRequestDeleteChip: PropTypes.func,
     }),
     active: PropTypes.bool,
+    nestedItems: PropTypes.arrayOf(PropTypes.node),
   };
 
   static defaultProps = {
@@ -81,6 +79,9 @@ class Combatant extends React.Component {
       listItem: {},
       avatar: {},
       hp: {},
+      slider: {
+        width: '90%',
+      },
       chip: {
         margin: 4,
       },
@@ -96,6 +97,7 @@ class Combatant extends React.Component {
       onRequestDeleteChip: () => {},
     },
     active: false,
+    nestedItems: null,
   };
 
   constructor(props) {
@@ -156,8 +158,7 @@ class Combatant extends React.Component {
 
     const { color } = this.getStatus({ hp: { max, current } });
     if (editable) {
-      // style={this.getStyle('slider')}
-      return <Slider step={1} min={0} max={max} value={current} color={color} onChange={onChangeHealth} />;
+      return <Slider step={1} min={0} max={max} value={current} color={color} onChange={onChangeHealth} style={this.getStyle('slider')} />;
     }
     return <LinearProgress style={this.getStyle('hp')} mode="determinate" min={0} max={max} value={current} color={color} />;
   }
@@ -195,6 +196,7 @@ class Combatant extends React.Component {
       styles,
       active,
       editable,
+      nestedItems,
     } = this.props;
 
 
@@ -208,11 +210,8 @@ class Combatant extends React.Component {
       listProps.rightIcon = <ActiveIcon />;
     }
 
-    if (editable) {
-      listProps.nestedItems = [
-        <ListItem primaryText="Toggle Visibility" rightIcon={<EyeIcon />} />,
-        <Divider />,
-      ];
+    if (editable && nestedItems !== null) {
+      listProps.nestedItems = [...nestedItems, <Divider />];
       listProps.initiallyOpen = true;
     }
 
