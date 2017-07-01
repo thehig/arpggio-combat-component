@@ -14,6 +14,8 @@ import {
 
 import { muiTheme } from 'storybook-addon-material-ui';
 /* eslint-enable import/no-unresolved, import/no-extraneous-dependencies */
+import { ListItem } from 'material-ui/List';
+import Toggle from 'material-ui/Toggle';
 
 import CombatList from '../src/CombatList';
 import Combatant from '../src/Combatant';
@@ -70,6 +72,12 @@ combatantStories.add('current turn', () =>
       ac={19}
       hp={{ max: 55, current: 54 }}
       image="http://orig14.deviantart.net/e1c5/f/2011/087/7/f/legolas_avatar_by_angelprincess101-d3conn4.png"
+      nestedItems={[
+        <ListItem
+          secondaryText="Visible to Players"
+          rightToggle={<Toggle onToggle={action('onToggleVisibility')}/>}
+        />,
+      ]}
     />
     <Combatant
       editable={boolean('gimli editable', false)}

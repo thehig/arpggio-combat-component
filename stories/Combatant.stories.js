@@ -202,8 +202,7 @@ combatantStories.add('editable & nested items', () =>
     nestedItems={[
       <ListItem
         secondaryText="Visible to Players"
-        rightToggle={<Toggle />}
-        onTouchTap={action('onToggleVisibility')}
+        rightToggle={<Toggle onToggle={action('onToggleVisibility')}/>}
       />,
     ]}
   />

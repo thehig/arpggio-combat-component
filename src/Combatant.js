@@ -89,7 +89,6 @@ class Combatant extends React.Component {
       avatar: {},
       hp: {},
       slider: {
-        width: '90%',
       },
       chip: {
         margin: 4,
@@ -278,9 +277,8 @@ class Combatant extends React.Component {
     };
 
     if (active) {
-      // Show the active icon **Conflicts with Expander**
-      listProps.backgroundColor = accent2Color;
       // Change the colors to secondary app color
+      listProps.backgroundColor = accent2Color;
     }
 
     if (editable && nestedItems !== null) {

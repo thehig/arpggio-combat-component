@@ -12,11 +12,13 @@ import NestedList from 'material-ui/List/NestedList';
 
 function getStyles(props, context, state) {
   const {
+    autoGenerateNestedIndicator,
     backgroundColor,
     insetChildren,
     leftAvatar,
     leftCheckbox,
     leftIcon,
+    nestedItems,
     nestedLevel,
     rightAvatar,
     rightIcon,
@@ -61,7 +63,7 @@ function getStyles(props, context, state) {
       paddingLeft: leftIcon || leftAvatar || leftCheckbox || insetChildren
         ? 72
         : 16,
-      paddingRight: rightIcon || rightAvatar || rightIconButton
+      paddingRight: rightIcon || rightAvatar || rightIconButton || (nestedItems && autoGenerateNestedIndicator)
         ? 56
         : rightToggle ? 72 : 16,
       paddingBottom: singleAvatar ? 20 : 16,
