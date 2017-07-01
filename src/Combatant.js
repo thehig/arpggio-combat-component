@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-// Theme Accessor
+// Theme Accessors
 import muiThemeable from 'material-ui/styles/muiThemeable';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import Avatar from 'material-ui/Avatar';
 
@@ -180,17 +182,27 @@ class Combatant extends React.Component {
     } = this.props;
 
     const { color } = this.getStatus({ hp: { max, current } });
+    
     if (editable) {
+      const sliderTheme = getMuiTheme({
+        slider: {
+          selectionColor: color,
+          handleFillColor: color
+        }
+      });
+
       return (
-        <Slider
-          step={1}
-          min={0}
-          max={max}
-          value={current}
-          color={color}
-          onChange={onChangeHealth}
-          style={this.getStyle('slider')}
-        />
+        <MuiThemeProvider muiTheme={sliderTheme}>
+          <Slider
+            step={1}
+            min={0}
+            max={max}
+            value={current}
+            color={color}
+            onChange={onChangeHealth}
+            style={this.getStyle('slider')}
+          />
+        </MuiThemeProvider>
       );
     }
     return (
