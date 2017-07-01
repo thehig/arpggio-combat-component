@@ -1,0 +1,17 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "editor.tabSize": 4,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "node_modules": true,
+        "*.sublime-workspace": true,
+        ".storybook": true
+    },
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "editor.renderWhitespace": "all"
+}
