@@ -68,6 +68,7 @@ class Combatant extends React.Component {
     }),
     active: PropTypes.bool,
     nestedItems: PropTypes.arrayOf(PropTypes.node),
+    muiTheme: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -251,6 +252,11 @@ class Combatant extends React.Component {
       active,
       editable,
       nestedItems,
+      muiTheme: {
+        palette: {
+          accent2Color,
+        },
+      },
     } = this.props;
 
     const listProps = {
@@ -261,7 +267,7 @@ class Combatant extends React.Component {
 
     if (active) {
       // Show the active icon **Conflicts with Expander**
-      listProps.rightIcon = <ActiveIcon />;
+      listProps.backgroundColor = accent2Color;
       // Change the colors to secondary app color
     }
 

@@ -12,6 +12,7 @@ import NestedList from 'material-ui/List/NestedList';
 
 function getStyles(props, context, state) {
   const {
+    backgroundColor,
     insetChildren,
     leftAvatar,
     leftCheckbox,
@@ -45,7 +46,7 @@ function getStyles(props, context, state) {
         !state.rightIconButtonHovered &&
         !state.rightIconButtonKeyboardFocused
         ? hoverColor
-        : null,
+        : backgroundColor,
       color: textColor,
       display: 'block',
       fontSize: 16,
@@ -159,6 +160,10 @@ class ListItem extends Component {
      * the element.
      */
     autoGenerateNestedIndicator: PropTypes.bool,
+    /**
+    * Override the normal background color.
+    */
+    backgroundColor: PropTypes.string,
     /**
      * Children passed into the `ListItem`.
      */
@@ -314,6 +319,7 @@ class ListItem extends Component {
 
   static defaultProps = {
     autoGenerateNestedIndicator: true,
+    backgroundColor: null,
     containerElement: 'span',
     disableKeyboardFocus: false,
     disabled: false,
