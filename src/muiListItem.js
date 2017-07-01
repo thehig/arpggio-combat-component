@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 import shallowEqual from 'recompose/shallowEqual';
-import {fade} from 'material-ui/utils/colorManipulator';
+import { fade } from 'material-ui/utils/colorManipulator';
 import transitions from 'material-ui/styles/transitions';
 import EnhancedButton from 'material-ui/internal/EnhancedButton';
 import IconButton from 'material-ui/IconButton';
@@ -25,8 +25,8 @@ function getStyles(props, context, state) {
     secondaryTextLines,
   } = props;
 
-  const {muiTheme} = context;
-  const {listItem} = muiTheme;
+  const { muiTheme } = context;
+  const { listItem } = muiTheme;
 
   const textColor = muiTheme.baseTheme.palette.textColor;
   const hoverColor = props.hoverColor || fade(textColor, 0.1);
@@ -35,14 +35,17 @@ function getStyles(props, context, state) {
   const twoLine = secondaryText && secondaryTextLines === 1;
   const threeLine = secondaryText && secondaryTextLines > 1;
 
-  const isKeyboardFocused =
-    (props.isKeyboardFocused !== undefined ? props : state).isKeyboardFocused;
+  const isKeyboardFocused = (props.isKeyboardFocused !== undefined
+    ? props
+    : state).isKeyboardFocused;
 
   const styles = {
     root: {
       backgroundColor: (isKeyboardFocused || state.hovered) &&
-      !state.rightIconButtonHovered &&
-      !state.rightIconButtonKeyboardFocused ? hoverColor : null,
+        !state.rightIconButtonHovered &&
+        !state.rightIconButtonKeyboardFocused
+        ? hoverColor
+        : null,
       color: textColor,
       display: 'block',
       fontSize: 16,
@@ -54,8 +57,12 @@ function getStyles(props, context, state) {
     // This inner div is needed so that ripples will span the entire container
     innerDiv: {
       marginLeft: nestedLevel * listItem.nestedLevelDepth,
-      paddingLeft: leftIcon || leftAvatar || leftCheckbox || insetChildren ? 72 : 16,
-      paddingRight: rightIcon || rightAvatar || rightIconButton ? 56 : rightToggle ? 72 : 16,
+      paddingLeft: leftIcon || leftAvatar || leftCheckbox || insetChildren
+        ? 72
+        : 16,
+      paddingRight: rightIcon || rightAvatar || rightIconButton
+        ? 56
+        : rightToggle ? 72 : 16,
       paddingBottom: singleAvatar ? 20 : 16,
       paddingTop: singleNoAvatar || threeLine ? 16 : 20,
       position: 'relative',
@@ -103,8 +110,7 @@ function getStyles(props, context, state) {
       left: 16,
     },
 
-    primaryText: {
-    },
+    primaryText: {},
 
     rightIconButton: {
       position: 'absolute',
@@ -341,16 +347,17 @@ class ListItem extends Component {
 
   componentWillMount() {
     this.setState({
-      open: this.props.open === null ? this.props.initiallyOpen === true : this.props.open,
+      open: this.props.open === null
+        ? this.props.initiallyOpen === true
+        : this.props.open,
     });
   }
 
   componentWillReceiveProps(nextProps) {
     // update the state when the component is controlled.
-    if (nextProps.open !== null)
-      this.setState({open: nextProps.open});
+    if (nextProps.open !== null) this.setState({ open: nextProps.open });
     if (nextProps.disabled && this.state.hovered)
-      this.setState({hovered: false});
+      this.setState({ hovered: false });
   }
 
   shouldComponentUpdate(nextProps, nextState, nextContext) {
@@ -370,9 +377,11 @@ class ListItem extends Component {
         case 'none':
           buttonEl.blur();
           break;
+
         case 'focused':
           buttonEl.focus();
           break;
+
         case 'keyboard-focused':
           this.button.setKeyboardFocus();
           buttonEl.focus();
@@ -382,12 +391,10 @@ class ListItem extends Component {
   }
 
   createDisabledElement(styles, contentChildren, additionalProps) {
-    const {
-      innerDivStyle,
-      style,
-    } = this.props;
+    const { innerDivStyle, style } = this.props;
 
-    const mergedDivStyles = Object.assign({},
+    const mergedDivStyles = Object.assign(
+      {},
       styles.root,
       styles.innerDiv,
       innerDivStyle,
@@ -405,12 +412,10 @@ class ListItem extends Component {
   }
 
   createLabelElement(styles, contentChildren, additionalProps) {
-    const {
-      innerDivStyle,
-      style,
-    } = this.props;
+    const { innerDivStyle, style } = this.props;
 
-    const mergedLabelStyles = Object.assign({},
+    const mergedLabelStyles = Object.assign(
+      {},
       styles.root,
       styles.innerDiv,
       innerDivStyle,
@@ -429,15 +434,16 @@ class ListItem extends Component {
   }
 
   createTextElement(styles, data, key) {
-    const {prepareStyles} = this.context.muiTheme;
+    const { prepareStyles } = this.context.muiTheme;
     if (React.isValidElement(data)) {
       let style = Object.assign({}, styles, data.props.style);
-      if (typeof data.type === 'string') { // if element is a native dom node
+      if (typeof data.type === 'string') {
+        // if element is a native dom node
         style = prepareStyles(style);
       }
       return React.cloneElement(data, {
-        key: key,
-        style: style,
+        key,
+        style,
       });
     }
 
@@ -449,21 +455,21 @@ class ListItem extends Component {
   }
 
   handleKeyboardFocus = (event, isKeyboardFocused) => {
-    this.setState({isKeyboardFocused: isKeyboardFocused});
+    this.setState({ isKeyboardFocused });
     this.props.onKeyboardFocus(event, isKeyboardFocused);
   };
 
-  handleMouseEnter = (event) => {
-    if (!this.state.touch) this.setState({hovered: true});
+  handleMouseEnter = event => {
+    if (!this.state.touch) this.setState({ hovered: true });
     this.props.onMouseEnter(event);
   };
 
-  handleMouseLeave = (event) => {
-    this.setState({hovered: false});
+  handleMouseLeave = event => {
+    this.setState({ hovered: false });
     this.props.onMouseLeave(event);
   };
 
-  handleTouchTap = (event) => {
+  handleTouchTap = event => {
     if (this.props.onTouchTap) {
       this.props.onTouchTap(event);
     }
@@ -473,11 +479,11 @@ class ListItem extends Component {
     }
   };
 
-  handleNestedListToggle = (event) => {
+  handleNestedListToggle = event => {
     event.stopPropagation();
 
     if (this.props.open === null) {
-      this.setState({open: !this.state.open}, () => {
+      this.setState({ open: !this.state.open }, () => {
         this.props.onNestedListToggle(this);
       });
     } else {
@@ -502,44 +508,49 @@ class ListItem extends Component {
 
     const iconButton = this.props.rightIconButton;
 
-    if (iconButton && iconButton.props.onKeyboardFocus) iconButton.props.onKeyboardFocus(event, isKeyboardFocused);
+    if (iconButton && iconButton.props.onKeyboardFocus)
+      iconButton.props.onKeyboardFocus(event, isKeyboardFocused);
   };
 
-  handleRightIconButtonMouseLeave = (event) => {
+  handleRightIconButtonMouseLeave = event => {
     const iconButton = this.props.rightIconButton;
-    this.setState({rightIconButtonHovered: false});
-    if (iconButton && iconButton.props.onMouseLeave) iconButton.props.onMouseLeave(event);
+    this.setState({ rightIconButtonHovered: false });
+    if (iconButton && iconButton.props.onMouseLeave)
+      iconButton.props.onMouseLeave(event);
   };
 
-  handleRightIconButtonMouseEnter = (event) => {
+  handleRightIconButtonMouseEnter = event => {
     const iconButton = this.props.rightIconButton;
-    this.setState({rightIconButtonHovered: true});
-    if (iconButton && iconButton.props.onMouseEnter) iconButton.props.onMouseEnter(event);
+    this.setState({ rightIconButtonHovered: true });
+    if (iconButton && iconButton.props.onMouseEnter)
+      iconButton.props.onMouseEnter(event);
   };
 
-  handleRightIconButtonMouseUp = (event) => {
+  handleRightIconButtonMouseUp = event => {
     const iconButton = this.props.rightIconButton;
     event.stopPropagation();
-    if (iconButton && iconButton.props.onMouseUp) iconButton.props.onMouseUp(event);
+    if (iconButton && iconButton.props.onMouseUp)
+      iconButton.props.onMouseUp(event);
   };
 
-  handleRightIconButtonTouchTap = (event) => {
+  handleRightIconButtonTouchTap = event => {
     const iconButton = this.props.rightIconButton;
 
     // Stop the event from bubbling up to the list-item
     event.stopPropagation();
-    if (iconButton && iconButton.props.onTouchTap) iconButton.props.onTouchTap(event);
+    if (iconButton && iconButton.props.onTouchTap)
+      iconButton.props.onTouchTap(event);
   };
 
-  handleTouchStart = (event) => {
-    this.setState({touch: true});
+  handleTouchStart = event => {
+    this.setState({ touch: true });
     this.props.onTouchStart(event);
   };
 
-  handleTouchEnd = (event) => {
-    this.setState({touch: true});
+  handleTouchEnd = event => {
+    this.setState({ touch: true });
     this.props.onTouchEnd(event);
-  }
+  };
 
   pushElement(children, element, baseStyles, additionalProps) {
     if (element) {
@@ -589,13 +600,14 @@ class ListItem extends Component {
       ...other
     } = this.props;
 
-    const {prepareStyles} = this.context.muiTheme;
+    const { prepareStyles } = this.context.muiTheme;
     const styles = getStyles(this.props, this.context, this.state);
     const contentChildren = [children];
 
     if (leftIcon) {
       const additionalProps = {
-        color: leftIcon.props.color || this.context.muiTheme.listItem.leftIconColor,
+        color: leftIcon.props.color ||
+          this.context.muiTheme.listItem.leftIconColor,
       };
       this.pushElement(
         contentChildren,
@@ -607,7 +619,8 @@ class ListItem extends Component {
 
     if (rightIcon) {
       const additionalProps = {
-        color: rightIcon.props.color || this.context.muiTheme.listItem.rightIconColor,
+        color: rightIcon.props.color ||
+          this.context.muiTheme.listItem.rightIconColor,
       };
       this.pushElement(
         contentChildren,
@@ -643,8 +656,10 @@ class ListItem extends Component {
 
     // RightIconButtonElement
     const hasNestListItems = nestedItems.length;
-    const hasRightElement = rightAvatar || rightIcon || rightIconButton || rightToggle;
-    const needsNestedIndicator = hasNestListItems && autoGenerateNestedIndicator && !hasRightElement;
+    const hasRightElement =
+      rightAvatar || rightIcon || rightIconButton || rightToggle;
+    const needsNestedIndicator =
+      hasNestListItems && autoGenerateNestedIndicator && !hasRightElement;
 
     if (rightIconButton || needsNestedIndicator) {
       let rightIconButtonElement = rightIconButton;
@@ -659,9 +674,9 @@ class ListItem extends Component {
 
       // Create a nested list indicator icon if we don't have an icon on the right
       if (needsNestedIndicator) {
-        rightIconButtonElement = this.state.open ?
-          <IconButton><OpenIcon /></IconButton> :
-          <IconButton><CloseIcon /></IconButton>;
+        rightIconButtonElement = this.state.open
+          ? <IconButton><OpenIcon /></IconButton>
+          : <IconButton><CloseIcon /></IconButton>;
         rightIconButtonHandlers.onTouchTap = this.handleNestedListToggle;
       }
 
@@ -699,38 +714,49 @@ class ListItem extends Component {
       contentChildren.push(secondaryTextElement);
     }
 
-    const nestedList = nestedItems.length ? (
-      <NestedList nestedLevel={nestedLevel} open={this.state.open} style={nestedListStyle}>
-        {nestedItems}
-      </NestedList>
-    ) : undefined;
+    const nestedList = nestedItems.length
+      ? <NestedList
+          nestedLevel={nestedLevel}
+          open={this.state.open}
+          style={nestedListStyle}
+        >
+          {nestedItems}
+        </NestedList>
+      : undefined;
 
-    const simpleLabel = !primaryTogglesNestedList && (leftCheckbox || rightToggle);
+    const simpleLabel =
+      !primaryTogglesNestedList && (leftCheckbox || rightToggle);
 
     return (
       <div>
-        {
-          simpleLabel ? this.createLabelElement(styles, contentChildren, other) :
-          disabled ? this.createDisabledElement(styles, contentChildren, other) : (
-            <EnhancedButton
-              containerElement={containerElement}
-              {...other}
-              disableKeyboardFocus={disableKeyboardFocus || this.state.rightIconButtonKeyboardFocused}
-              onKeyboardFocus={this.handleKeyboardFocus}
-              onMouseLeave={this.handleMouseLeave}
-              onMouseEnter={this.handleMouseEnter}
-              onTouchStart={this.handleTouchStart}
-              onTouchEnd={this.handleTouchEnd}
-              onTouchTap={this.handleTouchTap}
-              ref={(node) => this.button = node}
-              style={Object.assign({}, styles.root, style)}
-            >
-              <div style={prepareStyles(Object.assign(styles.innerDiv, innerDivStyle))}>
-                {contentChildren}
-              </div>
-            </EnhancedButton>
-          )
-        }
+        {simpleLabel
+          ? this.createLabelElement(styles, contentChildren, other)
+          : disabled
+              ? this.createDisabledElement(styles, contentChildren, other)
+              : <EnhancedButton
+                  containerElement={containerElement}
+                  {...other}
+                  disableKeyboardFocus={
+                    disableKeyboardFocus ||
+                      this.state.rightIconButtonKeyboardFocused
+                  }
+                  onKeyboardFocus={this.handleKeyboardFocus}
+                  onMouseLeave={this.handleMouseLeave}
+                  onMouseEnter={this.handleMouseEnter}
+                  onTouchStart={this.handleTouchStart}
+                  onTouchEnd={this.handleTouchEnd}
+                  onTouchTap={this.handleTouchTap}
+                  ref={node => this.button = node}
+                  style={Object.assign({}, styles.root, style)}
+                >
+                  <div
+                    style={prepareStyles(
+                      Object.assign(styles.innerDiv, innerDivStyle)
+                    )}
+                  >
+                    {contentChildren}
+                  </div>
+                </EnhancedButton>}
         {nestedList}
       </div>
     );
