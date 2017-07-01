@@ -34,8 +34,7 @@ const ourHeroes = [
     name: 'Legolas',
     ac: 19,
     hp: { max: 55, current: 54 },
-    image:
-      'http://orig14.deviantart.net/e1c5/f/2011/087/7/f/legolas_avatar_by_angelprincess101-d3conn4.png',
+    image: 'http://orig14.deviantart.net/e1c5/f/2011/087/7/f/legolas_avatar_by_angelprincess101-d3conn4.png',
   },
   {
     name: 'Gimli',
@@ -49,13 +48,13 @@ const combatantStories = storiesOf('CombatList', module)
   .addDecorator(muiTheme())
   .addDecorator(withKnobs);
 
-combatantStories.add('our heroes', () =>
+combatantStories.add('our heroes', () => (
   <CombatList>
     {ourHeroes.map(hero => <Combatant {...hero} />)}
   </CombatList>
-);
+));
 
-combatantStories.add('current turn', () =>
+combatantStories.add('current turn', () => (
   <CombatList>
     <Combatant
       editable={boolean('aragorn editable', false)}
@@ -75,7 +74,7 @@ combatantStories.add('current turn', () =>
       nestedItems={[
         <ListItem
           secondaryText="Visible to Players"
-          rightToggle={<Toggle onToggle={action('onToggleVisibility')}/>}
+          rightToggle={<Toggle onToggle={action('onToggleVisibility')} />}
         />,
       ]}
     />
@@ -88,4 +87,4 @@ combatantStories.add('current turn', () =>
       image="https://68.media.tumblr.com/avatar_b4d8059d2a39_128.png"
     />
   </CombatList>
-);
+));

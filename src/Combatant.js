@@ -23,7 +23,6 @@ import Divider from 'material-ui/Divider';
 // Icons
 import ActiveIcon from 'material-ui/svg-icons/action/grade';
 
-
 // Colors http://www.material-ui.com/#/customization/colors
 import {
   green400 as healthy,
@@ -60,7 +59,7 @@ class Combatant extends React.Component {
             startOfTurn: PropTypes.bool,
           }),
         }),
-      ]),
+      ])
     ),
     styles: PropTypes.object,
     actions: PropTypes.shape({
@@ -88,8 +87,7 @@ class Combatant extends React.Component {
       listItem: {},
       avatar: {},
       hp: {},
-      slider: {
-      },
+      slider: {},
       chip: {
         margin: 4,
       },
@@ -127,7 +125,7 @@ class Combatant extends React.Component {
     // Current Hp: 0 <= current <= max
     newProps.hp.current = Math.max(
       0,
-      Math.min(newProps.hp.current, newProps.hp.max),
+      Math.min(newProps.hp.current, newProps.hp.max)
     );
 
     /* eslint-enable no-param-reassign */
@@ -153,12 +151,12 @@ class Combatant extends React.Component {
     // If this key is in the default styles, return that style
     const defaultProvided = Object.prototype.hasOwnProperty.call(
       Combatant.defaultProps.styles,
-      key,
+      key
     );
     if (defaultProvided) return Combatant.defaultProps.styles[key];
 
     console.warn(
-      `Combatant attempted to access unrecognised styles.key: ${key}`,
+      `Combatant attempted to access unrecognised styles.key: ${key}`
     );
     return null;
   }
@@ -181,13 +179,13 @@ class Combatant extends React.Component {
     } = this.props;
 
     const { color } = this.getStatus({ hp: { max, current } });
-    
+
     if (editable) {
       const sliderTheme = getMuiTheme({
         slider: {
           selectionColor: color,
-          handleFillColor: color
-        }
+          handleFillColor: color,
+        },
       });
 
       return (
@@ -229,12 +227,9 @@ class Combatant extends React.Component {
 
     const noteStrings = notes.map(
       note =>
-        typeof note === 'string'
+        (typeof note === 'string'
           ? note
-          : `${note.text}${note.until &&
-              ` until ${note.until.startOfTurn
-                ? ' start'
-                : ' end'} of turn ${note.until.turn}`}`,
+          : `${note.text}${note.until && ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`}`)
     );
 
     return editable
@@ -246,11 +241,11 @@ class Combatant extends React.Component {
           style={this.getStyle('chipInput')}
         />
       : <div style={this.getStyle('chipWrapper')}>
-          {noteStrings.map(note =>
+          {noteStrings.map(note => (
             <Chip style={this.getStyle('chip')} key={note}>
               {note}
-            </Chip>,
-          )}
+            </Chip>
+          ))}
         </div>;
   }
 
@@ -263,11 +258,7 @@ class Combatant extends React.Component {
       active,
       editable,
       nestedItems,
-      muiTheme: {
-        palette: {
-          accent2Color,
-        },
-      },
+      muiTheme: { palette: { accent2Color } },
     } = this.props;
 
     const listProps = {

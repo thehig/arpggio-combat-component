@@ -63,7 +63,10 @@ function getStyles(props, context, state) {
       paddingLeft: leftIcon || leftAvatar || leftCheckbox || insetChildren
         ? 72
         : 16,
-      paddingRight: rightIcon || rightAvatar || rightIconButton || (nestedItems && autoGenerateNestedIndicator)
+      paddingRight: rightIcon ||
+        rightAvatar ||
+        rightIconButton ||
+        (nestedItems && autoGenerateNestedIndicator)
         ? 56
         : rightToggle ? 72 : 16,
       paddingBottom: singleAvatar ? 20 : 16,
