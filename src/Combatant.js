@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 // Theme Accessor
 import muiThemeable from 'material-ui/styles/muiThemeable';
 
-import { ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 
 // Non-editable
@@ -22,6 +21,7 @@ import Divider from 'material-ui/Divider';
 // Icons
 import ActiveIcon from 'material-ui/svg-icons/action/grade';
 
+
 // Colors http://www.material-ui.com/#/customization/colors
 import {
   green400 as healthy,
@@ -30,6 +30,9 @@ import {
   red500 as critical,
   lightBlue200 as activeBackground,
 } from 'material-ui/styles/colors';
+
+// Local Imports
+import ListItem from './muiListItem';
 
 class Combatant extends React.Component {
   static propTypes = {
