@@ -66,7 +66,7 @@ function getStyles(props, context, state) {
       paddingRight: rightIcon ||
         rightAvatar ||
         rightIconButton ||
-        (nestedItems && autoGenerateNestedIndicator)
+        (nestedItems.length && autoGenerateNestedIndicator)
         ? 56
         : rightToggle ? 72 : 16,
       paddingBottom: singleAvatar ? 20 : 16,
