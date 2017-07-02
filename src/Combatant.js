@@ -1,7 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { ListItem } from 'material-ui/List';
+// Theme Accessors
+import muiThemeable from 'material-ui/styles/muiThemeable';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
 import Avatar from 'material-ui/Avatar';
 
 // Non-editable
@@ -12,6 +16,12 @@ import Chip from 'material-ui/Chip';
 import Slider from 'material-ui/Slider';
 import ChipInput from 'material-ui-chip-input';
 
+// Nested Items
+import Subheader from 'material-ui/Subheader';
+import Divider from 'material-ui/Divider';
+
+// Icons
+import ActiveIcon from 'material-ui/svg-icons/action/grade';
 
 // Colors http://www.material-ui.com/#/customization/colors
 import {
@@ -19,7 +29,11 @@ import {
   lightGreen400 as stable,
   amber500 as bloodied,
   red500 as critical,
+  lightBlue200 as activeBackground,
 } from 'material-ui/styles/colors';
+
+// Local Imports
+import ListItem from './muiListItem';
 
 class Combatant extends React.Component {
   static propTypes = {
@@ -45,7 +59,7 @@ class Combatant extends React.Component {
             startOfTurn: PropTypes.bool,
           }),
         }),
-      ]),
+      ])
     ),
     styles: PropTypes.object,
     actions: PropTypes.shape({
@@ -53,6 +67,9 @@ class Combatant extends React.Component {
       onRequestAddChip: PropTypes.func,
       onRequestDeleteChip: PropTypes.func,
     }),
+    active: PropTypes.bool,
+    nestedItems: PropTypes.arrayOf(PropTypes.node),
+    muiTheme: PropTypes.object.isRequired,
   };
 
   static defaultProps = {
@@ -70,6 +87,7 @@ class Combatant extends React.Component {
       listItem: {},
       avatar: {},
       hp: {},
+      slider: {},
       chip: {
         margin: 4,
       },
@@ -84,6 +102,8 @@ class Combatant extends React.Component {
       onRequestAddChip: () => {},
       onRequestDeleteChip: () => {},
     },
+    active: false,
+    nestedItems: null,
   };
 
   constructor(props) {
@@ -103,7 +123,10 @@ class Combatant extends React.Component {
     newProps.hp.max = Math.max(0, newProps.hp.max);
 
     // Current Hp: 0 <= current <= max
-    newProps.hp.current = Math.max(0, Math.min(newProps.hp.current, newProps.hp.max));
+    newProps.hp.current = Math.max(
+      0,
+      Math.min(newProps.hp.current, newProps.hp.max)
+    );
 
     /* eslint-enable no-param-reassign */
   }
@@ -126,69 +149,136 @@ class Combatant extends React.Component {
     if (styleProvided) return styles[key];
 
     // If this key is in the default styles, return that style
-    const defaultProvided = Object.prototype.hasOwnProperty.call(Combatant.defaultProps.styles, key);
+    const defaultProvided = Object.prototype.hasOwnProperty.call(
+      Combatant.defaultProps.styles,
+      key
+    );
     if (defaultProvided) return Combatant.defaultProps.styles[key];
 
-    console.warn(`Combatant attempted to access unrecognised styles.key: ${key}`);
+    console.warn(
+      `Combatant attempted to access unrecognised styles.key: ${key}`
+    );
     return null;
   }
 
   createAvatar() {
     const { image, name } = this.props;
 
-    return image ? <Avatar style={this.getStyle('avatar')} src={image} /> : <Avatar style={this.getStyle('avatar')} >{name[0].toUpperCase()}</Avatar>;
+    return image
+      ? <Avatar style={this.getStyle('avatar')} src={image} />
+      : <Avatar style={this.getStyle('avatar')}>
+          {name[0].toUpperCase()}
+        </Avatar>;
   }
 
   createHpBar() {
-    const { editable, hp: { max, current }, actions: { onChangeHealth } } = this.props;
+    const {
+      editable,
+      hp: { max, current },
+      actions: { onChangeHealth },
+    } = this.props;
 
     const { color } = this.getStatus({ hp: { max, current } });
+
     if (editable) {
-      // style={this.getStyle('slider')}
-      return <Slider step={1} min={0} max={max} value={current} color={color} onChange={onChangeHealth} />;
+      const sliderTheme = getMuiTheme({
+        slider: {
+          selectionColor: color,
+          handleFillColor: color,
+        },
+      });
+
+      return (
+        <MuiThemeProvider muiTheme={sliderTheme}>
+          <Slider
+            step={1}
+            min={0}
+            max={max}
+            value={current}
+            color={color}
+            onChange={onChangeHealth}
+            style={this.getStyle('slider')}
+          />
+        </MuiThemeProvider>
+      );
     }
-    return <LinearProgress style={this.getStyle('hp')} mode="determinate" min={0} max={max} value={current} color={color} />;
+    return (
+      <LinearProgress
+        style={this.getStyle('hp')}
+        mode="determinate"
+        min={0}
+        max={max}
+        value={current}
+        color={color}
+      />
+    );
   }
 
   renderNotes() {
-    const { notes, editable, actions: { onRequestAddChip, onRequestDeleteChip } } = this.props;
+    const {
+      notes,
+      editable,
+      actions: { onRequestAddChip, onRequestDeleteChip },
+    } = this.props;
 
-    if (!notes || !notes.length || notes.length === 0) return <div />;
+    // Show the notes if we are editable, or there are notes
+    if (!editable && (!notes || !notes.length || notes.length === 0))
+      return <div />;
 
-    const noteStrings = notes
-      .map(note =>
-        typeof note === 'string'
+    const noteStrings = notes.map(
+      note =>
+        (typeof note === 'string'
           ? note
-          : `${note.text}${note.until && ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`}`
-      );
+          : `${note.text}${note.until && ` until ${note.until.startOfTurn ? ' start' : ' end'} of turn ${note.until.turn}`}`)
+    );
 
     return editable
-      ? <ChipInput fullWidth fullWidthInput value={noteStrings} onRequestAdd={onRequestAddChip} onRequestDelete={onRequestDeleteChip} style={this.getStyle('chipInput')} />
-      : (
-        <div style={this.getStyle('chipWrapper')} >
-          {noteStrings.map(note => <Chip style={this.getStyle('chip')} key={note} >{note}</Chip>)}
-        </div>
-      );
+      ? <ChipInput
+          fullWidth
+          value={noteStrings}
+          onRequestAdd={onRequestAddChip}
+          onRequestDelete={onRequestDeleteChip}
+          style={this.getStyle('chipInput')}
+        />
+      : <div style={this.getStyle('chipWrapper')}>
+          {noteStrings.map(note => (
+            <Chip style={this.getStyle('chip')} key={note}>
+              {note}
+            </Chip>
+          ))}
+        </div>;
   }
 
   render() {
     const {
       name,
-      hp: {
-        current,
-        max,
-      },
+      hp: { current, max },
       ac,
       styles,
+      active,
+      editable,
+      nestedItems,
+      muiTheme: { palette: { accent2Color } },
     } = this.props;
 
+    const listProps = {
+      secondaryText: `${name} [${current}/${max}] AC(${ac})`,
+      leftAvatar: this.createAvatar(),
+      style: styles.listItem,
+    };
+
+    if (active) {
+      // Change the colors to secondary app color
+      listProps.backgroundColor = accent2Color;
+    }
+
+    if (editable && nestedItems !== null) {
+      listProps.nestedItems = [...nestedItems, <Divider />];
+      listProps.initiallyOpen = true;
+    }
 
     return (
-      <ListItem
-        secondaryText={`${name} [${current}/${max}] AC(${ac})`}
-        leftAvatar={this.createAvatar()}
-        style={styles.listItem}
-      >
+      <ListItem {...listProps}>
         {this.createHpBar()}
         {this.renderNotes()}
       </ListItem>
@@ -196,4 +286,4 @@ class Combatant extends React.Component {
   }
 }
 
-export default Combatant;
+export default muiThemeable()(Combatant);
